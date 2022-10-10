@@ -1,34 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blog with NestJS
 
-## Getting Started
+## 구현기능
 
-First, run the development server:
+- [x] `/` - 목록 페이지
+- [x] `/[id]` - 상세 페이지
+- [x] 마크다운 파서(`remark`)를 이용해 포스팅 출력
+- [x] 각 마크다운의 meta data는 `gray-matter`, `frontmatter` 참고
+- [ ] (추가 구현) 코드 하이라이터는 `highlight.js`, `prism.js` 를 참고
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**:: Next.js에서 지원하는 Prefetching 메서드를 적절히 사용해주세요.**
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- 정적 페이지를 생성할 때 필요한 데이터 생성 → `getStaticProps`
+- 각 포스트를 그려줄 상세 페이지 경로를 생성 → `getStaticPaths`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+**:: 참고 사항**
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 가급적 TypeScript로 진행하시는 걸 추천드립니다.
+- 과제의 목적이 디자인에 있지는 않기 때문에 UI 관련 라이브러리는 자유롭게 사용하셔도 좋습니다. 단, 라이브러리의 종류와 Next.js 간 호환이 잘 맞지 않아 에러가 발생하는 경우가 있을 수 있으니 유의하여 사용해주세요.
+- CSS-in-JS 라이브러리 사용 시 `_document.js`(Next.js 공식 문서 참고)에 각 라이브러리(`styled-components`, `emotion`, …)에 알맞은 세팅을 추가해주세요.
+- [Vercel](https://vercel.com/)이나 [Netlify](https://www.netlify.com/)를 활용하면 정적 페이지를 간단하게 배포할 수 있습니다.
+- 과제 완료 후 과제 제출 페이지에 해당 프로젝트의 github 링크로 제출해주세요. 프로젝트에 대한 간단한 소개가 README에 작성되어 있으면 좋습니다.
+- 이 외에 추가 구현하고 싶은 기능이 있으면 자유롭게 구현해주세요.
