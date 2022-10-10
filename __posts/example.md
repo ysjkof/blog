@@ -10,9 +10,13 @@ tags:
   - plugins
   - spf13-vim
   - vim
-title: hello
+title: 포스팅 1
 ---
 
-## 예시입니다
+## 내용
 
-- 예시입니다
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus recusandae dolorum eveniet quos vitae, ipsa quae suscipit quibusdam perspiciatis beatae in. Aperiam aliquam, doloribus sapiente totam reiciendis sequi quam cumque!
+
+## 결론
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus recusandae dolorum eveniet quos vitae, ipsa quae suscipit quibusdam perspiciatis beatae in. Aperiam aliquam, doloribus sapiente totam reiciendis sequi quam cumque! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus recusandae dolorum eveniet quos vitae, ipsa quae suscipit quibusdam perspiciatis beatae in. Aperiam aliquam, doloribus sapiente totam reiciendis sequi quam cumque!
