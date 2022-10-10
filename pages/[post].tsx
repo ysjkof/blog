@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import type { NextPage } from 'next';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { unified } from 'unified';
@@ -10,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import matter from 'gray-matter';
+import { getPostDir, getPostsDir } from '../utils/util';
 
 const Post: NextPage<{ post: any; frontMatter: any }> = ({
   post,
@@ -37,6 +36,7 @@ const Post: NextPage<{ post: any; frontMatter: any }> = ({
             </ul>
           </div>
           <div>
+            <span>태그</span>
             <ul>
               {tags.map((tag: string) => (
                 <li key={tag} style={{ display: 'block' }}>
@@ -52,12 +52,8 @@ const Post: NextPage<{ post: any; frontMatter: any }> = ({
   );
 };
 
-const FOLDER_NAME = '__posts';
-
 export async function getStaticPaths() {
-  const _root = process.cwd();
-  const _postsDir = path.join(_root, FOLDER_NAME);
-  const posts = fs.readdirSync(_postsDir, 'utf-8');
+  const { posts } = getPostsDir();
 
   const paths = posts.map((filename) => {
     const post = filename.replace(/\.md/, '');
@@ -70,9 +66,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: Params) {
-  const _root = process.cwd();
-  const _postDir = path.join(_root, FOLDER_NAME, `${params.post}.md`);
-  const postFile = fs.readFileSync(_postDir, 'utf-8');
+  const postFile = getPostDir(`${params.post}.md`);
 
   const post = await unified()
     .use(remarkParse)

@@ -1,9 +1,8 @@
-import fs from 'fs';
-import path from 'path';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import matter from 'gray-matter';
 import Link from 'next/link';
+import matter from 'gray-matter';
+import { getPostDir, getPostsDir } from '../utils/util';
 
 const Home: NextPage<{
   posts: { [key: string]: string }[];
@@ -31,17 +30,12 @@ const Home: NextPage<{
   );
 };
 
-const FOLDER_NAME = '__posts';
-
 export async function getStaticProps() {
-  const _root = process.cwd();
-  const _postsDir = path.join(_root, FOLDER_NAME);
-  const posts = fs.readdirSync(_postsDir, 'utf-8');
+  const { posts } = getPostsDir();
 
   const frontMatters = posts
     .map((post) => {
-      const _postDir = path.join(_postsDir, post);
-      const postFile = fs.readFileSync(_postDir, 'utf-8');
+      const postFile = getPostDir(post);
       return matter(postFile).data;
     })
     .map((post, index) => {
