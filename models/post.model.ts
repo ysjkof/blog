@@ -5,8 +5,9 @@ export interface PostMetadata {
   slug: string;
   tags: string[];
   title: string;
+  pathname: string;
 }
 
 export interface Post extends PostMetadata {
-  pathname: string;
+  post: string;
 }
