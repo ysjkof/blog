@@ -1,13 +1,17 @@
-import type { NextPage } from 'next';
-import useSWR, { SWRConfig } from 'swr';
-import { useRouter } from 'next/router';
-import { fetcher } from '../utils/fetcher';
-import { Post } from '../models/post.model';
-import { getMetadatas, getPostFiles } from '../utils/posts.utils';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { parseMarkdown } from '../utils/markdown.utils';
 import Head from 'next/head';
-import Loading from '../components/Loading';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import type { NextPage } from 'next';
+import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import type { Post } from '../models/post.model';
+import useSWR, { SWRConfig } from 'swr';
+import { fetcher } from '../utils/fetcher';
+import { parseMarkdown } from '../utils/markdown.utils';
+import { getMetadatas, getPostFiles } from '../utils/posts.utils';
+const RowList = dynamic(() => import('../components/RowList'), { ssr: false });
+const Loading = dynamic(() => import('../components/Loading'), {
+  ssr: false,
+});
 
 export async function getStaticPaths() {
   const postFiles = getPostFiles();
@@ -39,38 +43,25 @@ export async function getStaticProps({ params }: Params) {
   };
 }
 
-function SmallList({ lists, symbol }: { lists?: string[]; symbol: '#' | '@' }) {
-  return (
-    <ul className="flex justify-end gap-6">
-      {lists?.map((list, i) => (
-        <li key={i}>
-          {symbol}
-          {list}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 function Main() {
   const { query } = useRouter();
   const { data } = useSWR<Post>(`/api/posts/${query.post || null}`, fetcher);
-
   if (!data) return <Loading />;
+
   const { categories, lastModifiedAt, post, publishedDate, tags, title } = data;
   return (
     <>
       <Head>
         <title>{title || '게시글'}</title>
       </Head>
-      <main className="mx-auto">
+      <main className="mx-auto mt-4">
         <header className="text-gray-600 border-b px-10 text-sm">
-          <div className="flex justify-end gap-6">
+          <div className="flex gap-6 mb-1">
             <span>발행: {publishedDate}</span>
             <span>수정: {lastModifiedAt}</span>
           </div>
-          <SmallList lists={tags} symbol="#" />
-          <SmallList lists={categories} symbol="@" />
+          <RowList lists={tags} listSymbol="#" />
+          <RowList lists={categories} listSymbol="@" />
           <h1 className="text-3xl text-center font-semibold">{title}</h1>
         </header>
 

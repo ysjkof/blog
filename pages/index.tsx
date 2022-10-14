@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import useSWR, { SWRConfig } from 'swr';
 import { PostMetadata } from '../models/post.model';
 import { fetcher } from '../utils/fetcher';
 import { getMetadatas, getPostFiles } from '../utils/posts.utils';
+const RowList = dynamic(() => import('../components/RowList'), { ssr: false });
 
 export async function getStaticProps() {
   const postFiles = getPostFiles();
@@ -37,27 +39,18 @@ function Main() {
             tags,
             title,
           } = post;
+
           return (
             <li
               key={title}
               className="post-title w-full rounded-2xl border px-5 py-1 shadow hover:border-transparent hover:ring-2 hover:ring-blue-500"
             >
-              <div className="mb-1 flex justify-between text-xs text-gray-600">
-                <ul className="flex gap-4">
-                  {tags.map((tag) => (
-                    <li key={tag}>#{tag}</li>
-                  ))}
-                </ul>
+              <RowList lists={tags} listSymbol="#">
                 <span>발행: {publishedDate}</span>
-              </div>
-              <div className="mb-1 flex text-xs justify-between text-gray-600">
-                <ul className="flex gap-4">
-                  {categories.map((tag) => (
-                    <li key={tag}>@{tag}</li>
-                  ))}
-                </ul>
+              </RowList>
+              <RowList lists={categories} listSymbol="@">
                 <span>수정: {lastModifiedAt}</span>
-              </div>
+              </RowList>
               <Link href={pathname}>{title}</Link>
               <p className="mb-2 text-sm text-gray-600">{description}</p>
             </li>
