@@ -1,11 +1,11 @@
 export interface PostMetadata {
-  categories: string[];
-  date: string;
-  description: string;
-  slug: string;
-  tags: string[];
   title: string;
+  description: string;
+  tags: string[];
+  categories: string[];
   pathname: string;
+  publishedDate: string;
+  lastModifiedAt: string;
 }
 
 export interface Post extends PostMetadata {
