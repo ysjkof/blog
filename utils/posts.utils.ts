@@ -32,12 +32,19 @@ export function getPostFile(filename: string) {
 /**
  * @param postFiles 전체 경로가 아닌 확장자가 포함된 파일 이름.
  */
-export function getMetadata(postFiles: string[]) {
-  return postFiles
-    .map((postFile) => {
-      return matter(getPostFile(postFile)).data;
-    })
-    .map((post, index) => {
-      return { ...post, pathname: postFiles[index].replace(/\.md/, '') };
-    });
+export function getMetadatas(postFiles: string | string[]) {
+  if (Array.isArray(postFiles)) {
+    return postFiles
+      .map((postFile) => {
+        return matter(getPostFile(postFile)).data;
+      })
+      .map((post, index) => {
+        return { ...post, pathname: postFiles[index].replace(/\.md/, '') };
+      });
+  }
+
+  return {
+    ...matter(getPostFile(postFiles)).data,
+    pathname: postFiles.replace(/\.md/, ''),
+  };
 }
