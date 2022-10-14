@@ -3,15 +3,9 @@ import useSWR, { SWRConfig } from 'swr';
 import { useRouter } from 'next/router';
 import { fetcher } from '../utils/fetcher';
 import { Post } from '../models/post.model';
-import { getMetadatas, getPostFile, getPostFiles } from '../utils/posts.utils';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkGfm from 'remark-gfm';
-import remarkRehype from 'remark-rehype';
-import rehypeSanitize from 'rehype-sanitize';
-import rehypeStringify from 'rehype-stringify';
+import { getMetadatas, getPostFiles } from '../utils/posts.utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import { parseMarkdown } from '../utils/markdown.utils';
 
 export async function getStaticPaths() {
   const postFiles = getPostFiles();
@@ -29,21 +23,14 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: Params) {
   const filename = params.post + '.md';
   const metadata = getMetadatas(filename);
-  const pasredMarkdown = await unified()
-    .use(remarkParse)
-    .use(remarkFrontmatter, ['yaml'])
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeSanitize)
-    .use(rehypeStringify)
-    .process(getPostFile(filename));
+  const parsedMarkdown = await parseMarkdown(filename);
 
   return {
     props: {
       fallback: {
         [`/api/posts/${params.post}`]: {
           ...metadata,
-          post: pasredMarkdown.value,
+          post: parsedMarkdown.value,
         },
       },
     },
