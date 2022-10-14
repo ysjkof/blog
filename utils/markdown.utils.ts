@@ -1,4 +1,4 @@
-import rehypeSanitize from 'rehype-sanitize';
+import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
@@ -13,7 +13,7 @@ export function parseMarkdown(filename: string) {
     .use(remarkFrontmatter, ['yaml'])
     .use(remarkGfm)
     .use(remarkRehype)
-    .use(rehypeSanitize)
     .use(rehypeStringify)
+    .use(rehypeHighlight)
     .process(getPostFile(filename));
 }
