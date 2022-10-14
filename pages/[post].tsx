@@ -6,6 +6,8 @@ import { Post } from '../models/post.model';
 import { getMetadatas, getPostFiles } from '../utils/posts.utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { parseMarkdown } from '../utils/markdown.utils';
+import Head from 'next/head';
+import Loading from '../components/Loading';
 
 export async function getStaticPaths() {
   const postFiles = getPostFiles();
@@ -37,42 +39,47 @@ export async function getStaticProps({ params }: Params) {
   };
 }
 
+function SmallList({ lists, symbol }: { lists?: string[]; symbol: '#' | '@' }) {
+  return (
+    <ul className="flex justify-end gap-6">
+      {lists?.map((list, i) => (
+        <li key={i}>
+          {symbol}
+          {list}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function Main() {
   const { query } = useRouter();
   const { data } = useSWR<Post>(`/api/posts/${query.post || null}`, fetcher);
 
+  if (!data) return <Loading />;
+  const { categories, lastModifiedAt, post, publishedDate, tags, title } = data;
   return (
-    <main>
-      <header>
-        <div>
-          <span>{data?.title}</span>
-        </div>
-        <div>
-          <span>{data?.date}</span>
-        </div>
-        <div>
-          <span>분류</span>
-          <ul>
-            {data?.categories.map((category: string) => (
-              <li key={category} style={{ display: 'block' }}>
-                {category}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <span>태그</span>
-          <ul>
-            {data?.tags.map((tag: string) => (
-              <li key={tag} style={{ display: 'block' }}>
-                {tag}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </header>
-      <article dangerouslySetInnerHTML={{ __html: data?.post || '' }}></article>
-    </main>
+    <>
+      <Head>
+        <title>{title || '게시글'}</title>
+      </Head>
+      <main className="mx-auto">
+        <header className="text-gray-600 border-b px-10 text-sm">
+          <div className="flex justify-end gap-6">
+            <span>발행: {publishedDate}</span>
+            <span>수정: {lastModifiedAt}</span>
+          </div>
+          <SmallList lists={tags} symbol="#" />
+          <SmallList lists={categories} symbol="@" />
+          <h1 className="text-3xl text-center font-semibold">{title}</h1>
+        </header>
+
+        <article
+          dangerouslySetInnerHTML={{ __html: post || '' }}
+          className="prose mx-auto my-10"
+        />
+      </main>
+    </>
   );
 }
 

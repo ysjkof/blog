@@ -24,14 +24,45 @@ function Main() {
 
   return (
     <main>
-      <h1>Next SSG Blog</h1>
-      <h2>Posts</h2>
-      <ul>
-        {data?.map((post) => (
-          <li key={post.title}>
-            <Link href={post.pathname}>{post.title}</Link>
-          </li>
-        ))}
+      <h1 className="text-center">Next SSG Blog</h1>
+      <h2 className="text-center">Posts</h2>
+      <ul className="h-full w-full space-y-4 py-4 px-1">
+        {data?.map((post) => {
+          const {
+            categories,
+            description,
+            lastModifiedAt,
+            pathname,
+            publishedDate,
+            tags,
+            title,
+          } = post;
+          return (
+            <li
+              key={title}
+              className="post-title w-full rounded-2xl border px-5 py-1 shadow hover:border-transparent hover:ring-2 hover:ring-blue-500"
+            >
+              <div className="mb-1 flex justify-between text-xs text-gray-600">
+                <ul className="flex gap-4">
+                  {tags.map((tag) => (
+                    <li key={tag}>#{tag}</li>
+                  ))}
+                </ul>
+                <span>발행: {publishedDate}</span>
+              </div>
+              <div className="mb-1 flex text-xs justify-between text-gray-600">
+                <ul className="flex gap-4">
+                  {categories.map((tag) => (
+                    <li key={tag}>@{tag}</li>
+                  ))}
+                </ul>
+                <span>수정: {lastModifiedAt}</span>
+              </div>
+              <Link href={pathname}>{title}</Link>
+              <p className="mb-2 text-sm text-gray-600">{description}</p>
+            </li>
+          );
+        })}
       </ul>
     </main>
   );
