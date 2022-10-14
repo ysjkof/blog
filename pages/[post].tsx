@@ -1,34 +1,27 @@
 import type { NextPage } from 'next';
-import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { unified } from 'unified';
-import rehypeSanitize from 'rehype-sanitize';
-import rehypeStringify from 'rehype-stringify';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkGfm from 'remark-gfm';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import matter from 'gray-matter';
-import { getPostFile, getPostFiles } from '../utils/posts.utils';
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { fetcher } from '../utils/fetcher';
+import { Post } from '../models/post.model';
 
-const Post: NextPage<{ post: any; frontMatter: any }> = ({
-  post,
-  frontMatter,
-}) => {
-  const { title, categories, date, tags } = frontMatter;
+const Post: NextPage = () => {
+  const { query } = useRouter();
+  const { data } = useSWR<Post>(`/api/posts/${query.post || null}`, fetcher);
+
   return (
     <div>
       <main>
         <header>
           <div>
-            <span>{title}</span>
+            <span>{data?.title}</span>
           </div>
           <div>
-            <span>{date}</span>
+            <span>{data?.date}</span>
           </div>
           <div>
             <span>분류</span>
             <ul>
-              {categories.map((category: string) => (
+              {data?.categories.map((category: string) => (
                 <li key={category} style={{ display: 'block' }}>
                   {category}
                 </li>
@@ -38,7 +31,7 @@ const Post: NextPage<{ post: any; frontMatter: any }> = ({
           <div>
             <span>태그</span>
             <ul>
-              {tags.map((tag: string) => (
+              {data?.tags.map((tag: string) => (
                 <li key={tag} style={{ display: 'block' }}>
                   {tag}
                 </li>
@@ -46,45 +39,12 @@ const Post: NextPage<{ post: any; frontMatter: any }> = ({
             </ul>
           </div>
         </header>
-        <article dangerouslySetInnerHTML={{ __html: post }}></article>
+        <article
+          dangerouslySetInnerHTML={{ __html: data?.post || '' }}
+        ></article>
       </main>
     </div>
   );
 };
-
-export async function getStaticPaths() {
-  const postFiles = getPostFiles();
-
-  const paths = postFiles.map((filename) => {
-    const post = filename.replace(/\.md/, '');
-    return {
-      params: { post },
-    };
-  });
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }: Params) {
-  const postFile = getPostFile(`${params.post}.md`);
-
-  const post = await unified()
-    .use(remarkParse)
-    .use(remarkFrontmatter, ['yaml'])
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeSanitize)
-    .use(rehypeStringify)
-    .process(postFile);
-
-  const { data } = matter(postFile);
-
-  return {
-    props: {
-      post: post.value,
-      frontMatter: data,
-    },
-  };
-}
 
 export default Post;

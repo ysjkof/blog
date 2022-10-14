@@ -2,20 +2,11 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { Post } from '../models/post.model';
+import { PostMetadata } from '../models/post.model';
 import { fetcher } from '../utils/fetcher';
-import { getMetadata, getPostFiles } from '../utils/posts.utils';
-
-export async function getStaticProps() {
-  const postFiles = getPostFiles();
-  const frontMatters = getMetadata(postFiles);
-
-  return { props: { posts: frontMatters } };
-}
 
 const Home: NextPage = () => {
-  const { data } = useSWR<Post[]>('/api/posts', fetcher);
-  console.log(data);
+  const { data } = useSWR<PostMetadata[]>('/api/posts', fetcher);
 
   if (!data) return <></>;
 
