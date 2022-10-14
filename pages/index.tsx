@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import matter from 'gray-matter';
-import { getPostDir, getPostsDir } from '../utils/util';
+import { getPostFiles } from '../utils/posts.utils';
 
 const Home: NextPage<{
   posts: { [key: string]: string }[];
@@ -31,15 +31,14 @@ const Home: NextPage<{
 };
 
 export async function getStaticProps() {
-  const { posts } = getPostsDir();
+  const postFiles = getPostFiles();
 
-  const frontMatters = posts
-    .map((post) => {
-      const postFile = getPostDir(post);
+  const frontMatters = postFiles
+    .map((postFile) => {
       return matter(postFile).data;
     })
     .map((post, index) => {
-      return { ...post, pathname: posts[index].replace(/\.md/, '') };
+      return { ...post, pathname: postFiles[index].replace(/\.md/, '') };
     });
 
   return { props: { posts: frontMatters } };

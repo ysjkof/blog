@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import matter from 'gray-matter';
-import { getPostDir, getPostsDir } from '../utils/util';
+import { getPostFile, getPostFiles } from '../utils/posts.utils';
 
 const Post: NextPage<{ post: any; frontMatter: any }> = ({
   post,
@@ -53,9 +53,9 @@ const Post: NextPage<{ post: any; frontMatter: any }> = ({
 };
 
 export async function getStaticPaths() {
-  const { posts } = getPostsDir();
+  const postFiles = getPostFiles();
 
-  const paths = posts.map((filename) => {
+  const paths = postFiles.map((filename) => {
     const post = filename.replace(/\.md/, '');
     return {
       params: { post },
@@ -66,7 +66,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: Params) {
-  const postFile = getPostDir(`${params.post}.md`);
+  const postFile = getPostFile(`${params.post}.md`);
 
   const post = await unified()
     .use(remarkParse)
