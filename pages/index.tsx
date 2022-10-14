@@ -1,12 +1,24 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import matter from 'gray-matter';
-import { getPostFiles } from '../utils/posts.utils';
+import useSWR from 'swr';
+import { Post } from '../models/post.model';
+import { fetcher } from '../utils/fetcher';
+import { getMetadata, getPostFiles } from '../utils/posts.utils';
 
-const Home: NextPage<{
-  posts: { [key: string]: string }[];
-}> = ({ posts }) => {
+export async function getStaticProps() {
+  const postFiles = getPostFiles();
+  const frontMatters = getMetadata(postFiles);
+
+  return { props: { posts: frontMatters } };
+}
+
+const Home: NextPage = () => {
+  const { data } = useSWR<Post[]>('/api/posts', fetcher);
+  console.log(data);
+
+  if (!data) return <></>;
+
   return (
     <div>
       <Head>
@@ -19,7 +31,7 @@ const Home: NextPage<{
         <h1>Next SSG Blog</h1>
         <h2>Posts</h2>
         <ul>
-          {posts.map((post) => (
+          {data.map((post) => (
             <li key={post.title}>
               <Link href={post.pathname}>{post.title}</Link>
             </li>
@@ -29,19 +41,5 @@ const Home: NextPage<{
     </div>
   );
 };
-
-export async function getStaticProps() {
-  const postFiles = getPostFiles();
-
-  const frontMatters = postFiles
-    .map((postFile) => {
-      return matter(postFile).data;
-    })
-    .map((post, index) => {
-      return { ...post, pathname: postFiles[index].replace(/\.md/, '') };
-    });
-
-  return { props: { posts: frontMatters } };
-}
 
 export default Home;
