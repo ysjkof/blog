@@ -1,12 +1,8 @@
 ---
 title: SSR과 SSG, CSR 개념정리
 description: SSR(Server Side Rendering), SSG(Static Site Generation), CSR(Client Side Rendering) 개념정리
-categories:
-  - 개념정리
-tags:
-  - SSR
-  - SSG
-  - CSR
+categories: [개념정리]
+tags: [SSR, SSG, CSR]
 publishedDate: 2022/10/05
 lastModifiedAt: 2022/10/05
 ---

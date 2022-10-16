@@ -4,7 +4,7 @@ import path from 'path';
 
 function getPostsPath() {
   const rootDir = process.cwd();
-  const FOLDER_NAME = '__posts';
+  const FOLDER_NAME = '_posts';
 
   return path.join(rootDir, FOLDER_NAME);
 }
