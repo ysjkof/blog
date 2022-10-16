@@ -9,5 +9,5 @@ export interface PostMetadata {
 }
 
 export interface Post extends PostMetadata {
-  post: string;
+  content: string;
 }
