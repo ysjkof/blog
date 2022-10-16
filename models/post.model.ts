@@ -11,3 +11,10 @@ export interface PostMetadata {
 export interface Post extends PostMetadata {
   content: string;
 }
+
+export interface Category {
+  name: string;
+  count: number;
+}
+
+export interface Tags extends Category {}
