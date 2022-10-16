@@ -15,5 +15,6 @@ export function parseMarkdown(filename: string) {
     .use(remarkRehype)
     .use(rehypeStringify)
     .use(rehypeHighlight)
-    .process(getPostFile(filename));
+    .process(getPostFile(filename))
+    .then((result) => result.value);
 }
