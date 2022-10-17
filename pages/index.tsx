@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import useSWR, { unstable_serialize } from 'swr';
-import { Categories, PostCard, TagList } from '../components/PostList';
+import { Categories, PostCard, Tags } from '../components/PostList';
 import { PostMetadata } from '../models/post.model';
 import { getUniqueValue } from '../services/posts.services';
 import { getMetadatas, getPostFiles, sortMetadata } from '../utils/posts.utils';
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
     <main>
       <h1 className="text-center">Next SSG Blog</h1>
       <Categories categories={categories} />
-      <TagList tags={tags} />
+      <Tags tags={tags} />
       <h2 className="text-center">Posts</h2>
       <ul className="h-full w-full space-y-4 py-4 px-1">
         {data.map((post) => (

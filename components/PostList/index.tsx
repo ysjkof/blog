@@ -1,5 +1,5 @@
 import { Categories } from './Categories';
 import { PostCard } from './PostCard';
-import { TagList } from './TagList';
+import { Tags } from './Tags';
 
-export { Categories, PostCard, TagList };
+export { Categories, PostCard, Tags };
