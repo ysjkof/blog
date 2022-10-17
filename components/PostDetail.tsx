@@ -26,8 +26,8 @@ export default function PostDetail() {
             <span>발행: {publishedDate}</span>
             <span>수정: {lastModifiedAt}</span>
           </div>
-          <RowList lists={tags} listSymbol="#" />
           <RowList lists={categories} listSymbol="@" />
+          <RowList lists={tags} listSymbol="#" />
           <h1 className="text-3xl text-center font-semibold">{title}</h1>
         </header>
 
