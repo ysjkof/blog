@@ -3,8 +3,7 @@ import { PostMetadata } from '../models/post.model';
 type ArrayOfString = string[];
 type SpreadKey = keyof Pick<PostMetadata, 'categories' | 'tags'>;
 
-// Tag
-function spreadTags(data: PostMetadata[], key: SpreadKey) {
+function spreadArray(data: PostMetadata[], key: SpreadKey) {
   const initialTags: string[] = [];
   return data.reduce((prev, cur) => [...prev, ...cur[key]], initialTags);
 }
@@ -20,7 +19,7 @@ function addCountInValue(
 }
 
 export function getUniqueValue(data: PostMetadata[], key: SpreadKey) {
-  const duplicatedValue = spreadTags(data, key);
+  const duplicatedValue = spreadArray(data, key);
   const uniqueValue = duplicatedValue.filter(
     (tag, index) => duplicatedValue.indexOf(tag) === index
   );
