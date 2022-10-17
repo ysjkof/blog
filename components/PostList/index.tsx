@@ -10,7 +10,6 @@ function PostList({ data }: { data: PostMetadata[] }) {
 
   return (
     <main>
-      <h1 className="text-center">Next SSG Blog</h1>
       <Categories categories={categories} />
       <Tags tags={tags} />
       <h2 className="text-center">Posts</h2>
