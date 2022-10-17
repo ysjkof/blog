@@ -4,7 +4,7 @@ import useSWR, { unstable_serialize } from 'swr';
 import { Categories, PostCard, TagList } from '../components/PostList';
 import { PostMetadata } from '../models/post.model';
 import { getUniqueValue } from '../services/posts.services';
-import { getMetadatas, getPostFiles } from '../utils/posts.utils';
+import { getMetadatas, getPostFiles, sortMetadata } from '../utils/posts.utils';
 const Loading = dynamic(() => import('../components/Loading'), {
   ssr: false,
 });
@@ -16,7 +16,7 @@ export async function getStaticProps() {
   return {
     props: {
       fallback: {
-        [unstable_serialize(['posts'])]: postsMetadata,
+        [unstable_serialize(['posts'])]: sortMetadata(postsMetadata),
       },
     },
   };

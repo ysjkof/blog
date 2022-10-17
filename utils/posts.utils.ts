@@ -1,6 +1,7 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
+import { PostMetadata } from '../models/post.model';
 
 function getPostsPath() {
   const rootDir = process.cwd();
@@ -36,8 +37,15 @@ export function getMetadata(postFile: string) {
   return {
     ...matter(getPostFile(postFile)).data,
     pathname: postFile.replace(/\.md/, ''),
-  };
+  } as PostMetadata;
 }
 export function getMetadatas(postFiles: string[]) {
   return postFiles.map(getMetadata);
+}
+
+export function sortMetadata(metadata: PostMetadata[]) {
+  return metadata.sort(
+    (a, b) =>
+      new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
+  );
 }
