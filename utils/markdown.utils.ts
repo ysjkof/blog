@@ -1,4 +1,5 @@
 import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
@@ -13,6 +14,7 @@ export function parseMarkdown(filename: string) {
     .use(remarkFrontmatter, ['yaml'])
     .use(remarkGfm)
     .use(remarkRehype)
+    .use(rehypeSlug)
     .use(rehypeStringify)
     .use(rehypeHighlight)
     .process(getPostFile(filename))
