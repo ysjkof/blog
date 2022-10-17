@@ -30,17 +30,49 @@ export function getPostFile(filename: string) {
   return postFile;
 }
 
+interface MetadataOption {
+  tag?: string;
+  category?: string;
+}
 /**
  * @param postFiles 전체 경로가 아닌 확장자가 포함된 파일 이름.
  */
-export function getMetadata(postFile: string) {
+export function getMetadata(postFile: string, options?: MetadataOption) {
+  const metadata = matter(getPostFile(postFile)).data as PostMetadata;
+
+  if (options) {
+    const { category, tag } = options;
+
+    if (tag && metadata.tags.includes(tag)) {
+      return {
+        ...metadata,
+        pathname: postFile.replace(/\.md/, ''),
+      };
+    }
+    if (category && metadata.categories.includes(category)) {
+      return {
+        ...metadata,
+        pathname: postFile.replace(/\.md/, ''),
+      };
+    }
+    return null;
+  }
+
   return {
-    ...matter(getPostFile(postFile)).data,
+    ...metadata,
     pathname: postFile.replace(/\.md/, ''),
-  } as PostMetadata;
+  };
 }
-export function getMetadatas(postFiles: string[]) {
-  return postFiles.map(getMetadata);
+
+export function getMetadatas(postFiles: string[], options?: MetadataOption) {
+  const metadatas: PostMetadata[] = [];
+
+  postFiles.forEach((postFile) => {
+    const metadata = getMetadata(postFile, options);
+    if (metadata) metadatas.push(metadata);
+  });
+
+  return metadatas;
 }
 
 export function sortMetadata(metadata: PostMetadata[]) {

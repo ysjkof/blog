@@ -1,10 +1,9 @@
 import type { NextPage } from 'next';
+import type { PostMetadata } from '../models/post.model';
 import dynamic from 'next/dynamic';
 import useSWR, { unstable_serialize } from 'swr';
-import { Categories, PostCard, Tags } from '../components/PostList';
-import { PostMetadata } from '../models/post.model';
-import { getUniqueValue } from '../services/posts.services';
 import { getMetadatas, getPostFiles, sortMetadata } from '../utils/posts.utils';
+import PostList from '../components/PostList';
 const Loading = dynamic(() => import('../components/Loading'), {
   ssr: false,
 });
@@ -26,22 +25,7 @@ const Home: NextPage = () => {
   const { data } = useSWR<PostMetadata[]>(['posts']);
   if (!data) return <Loading />;
 
-  const tags = getUniqueValue(data, 'tags');
-  const categories = getUniqueValue(data, 'categories');
-
-  return (
-    <main>
-      <h1 className="text-center">Next SSG Blog</h1>
-      <Categories categories={categories} />
-      <Tags tags={tags} />
-      <h2 className="text-center">Posts</h2>
-      <ul className="h-full w-full space-y-4 py-4 px-1">
-        {data.map((post) => (
-          <PostCard key={post.title} post={post} />
-        ))}
-      </ul>
-    </main>
-  );
+  return <PostList data={data}></PostList>;
 };
 
 export default Home;

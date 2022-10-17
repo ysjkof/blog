@@ -9,7 +9,7 @@ export function Categories({ categories }: { categories: Category[] }) {
         {categories.map((tag) => {
           const { name, count } = tag;
           return (
-            <Link key={name} href={`/tags/${name}`}>
+            <Link key={name} href={`/category/${name}`}>
               <a className="space-x-0.5 text-xs text-gray-500 hover:font-semibold hover:text-gray-600">
                 <span>@{name}</span>
                 <span>({count})</span>
