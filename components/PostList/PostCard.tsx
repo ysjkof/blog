@@ -32,7 +32,7 @@ export function PostCard({ post }: { post: PostMetadata }) {
           수정: {lastModifiedAt}
         </span>
       </div>
-      <Link href={pathname}>{title}</Link>
+      <Link href={`/${pathname}`}>{title}</Link>
       <p className="mb-2 text-sm text-gray-600">{description}</p>
     </li>
   );
